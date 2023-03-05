@@ -5,6 +5,7 @@ import {
 
 import { isLeft, PathReporter, t } from "../src/deps.ts";
 import { Data } from "../src/data.ts";
+import { handle } from "../src/main.ts";
 
 interface TestData {
   name: string;
@@ -43,17 +44,17 @@ Deno.test("test data", async (tt) => {
 
   for (const test of tests) {
     await tt.step(test.name, async () => {
-      const decoded = Data.decode(test.data); // Either<Errors, Data>
-      if (isLeft(decoded)) {
+      const rawData = JSON.stringify(test.data);
+      try {
+        handle(rawData);
+        assert(
+          test.shouldSucceed,
+          "test succeeded when it should have failed",
+        );
+      } catch (e) {
         assert(
           !test.shouldSucceed,
-          `Could not validate data: ${PathReporter.report(decoded).join("\n")}`,
         );
-      } else {
-        assert(test.shouldSucceed, "test succeeded when it should have failed");
-        // get the runtime type and cast right to it
-        type DataT = t.TypeOf<typeof Data>;
-        const decodedData: DataT = decoded.right;
       }
     });
   }
