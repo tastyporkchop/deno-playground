@@ -1,0 +1,21 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts"
+  },
+  "lint": {
+    "files": {
+      "include": ["src/"],
+      "exclude": ["src/testdata/"]
+    },
+    "rules": {
+      "tags": ["recommended"],
+      "include": [
+        "default-param-last",
+        "eqeqeq",
+        "explicit-function-return-type",
+        "explicit-module-boundary-types"
+      ],
+      "exclude": ["no-unused-vars"]
+    }
+  }
+}
