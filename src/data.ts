@@ -14,4 +14,6 @@ const DataOpt = t.partial({
 const Data = t.intersection([DataReq, DataOpt]);
 type Data = t.TypeOf<typeof Data>;
 
+type DataT = t.TypeOf<typeof Data>;
 export { Data };
+export type { DataT };

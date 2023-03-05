@@ -1,5 +1,5 @@
 import { isLeft, PathReporter, t } from "./deps.ts";
-import { Data } from "./data.ts";
+import { Data, DataT } from "./data.ts";
 
 export function main(): void {
   // some input data
@@ -9,6 +9,13 @@ export function main(): void {
     c: [1, 2, 3],
   };
   // decode it
+  const decodedData = handle(JSON.stringify(data));
+
+  console.log(Data.encode(decodedData));
+}
+
+export function handle(rawData: string): DataT {
+  const data = JSON.parse(rawData);
   const decoded = Data.decode(data); // Either<Errors, Data>
   if (isLeft(decoded)) {
     throw Error(
@@ -16,10 +23,7 @@ export function main(): void {
     );
   }
   // get the runtime type and cast right to it
-  type DataT = t.TypeOf<typeof Data>;
-  const decodedData: DataT = decoded.right;
-
-  console.log(Data.encode(decodedData));
+  return decoded.right;
 }
 
 // Learn more at https://deno.land/manual/examples/module_metadata#concepts
